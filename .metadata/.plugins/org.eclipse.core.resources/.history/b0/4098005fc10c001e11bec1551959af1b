@@ -1,0 +1,5 @@
+package com.youtube.jwt.util;
+
+public class JwtUtil {
+
+}

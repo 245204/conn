@@ -1,0 +1,11 @@
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka
+spring.application.name=gateway
+server.port=9093
+
+spring.cloud.gateway.routes[0].id=admin
+spring.cloud.gateway.routes[0].uri=lb://admin
+spring.cloud.gateway.routes[0].predicates[0]=Path=/1.0/admin/**
+
+#spring.cloud.gateway.routes[1].id=admin
+#spring.cloud.gateway.routes[1].uri=lb://admin
+#spring.cloud.gateway.routes[1].predicates[0]=Path=/1.0/user/**

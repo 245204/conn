@@ -1,0 +1,5 @@
+package com.ust.project.repository;
+
+public interface RatingRepository {
+
+}

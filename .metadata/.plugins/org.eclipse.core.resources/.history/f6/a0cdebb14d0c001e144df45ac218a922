@@ -1,0 +1,5 @@
+package com.ust.project.service;
+
+public class UserService {
+
+}

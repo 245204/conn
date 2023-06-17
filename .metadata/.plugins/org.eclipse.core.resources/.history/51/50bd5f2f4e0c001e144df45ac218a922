@@ -1,0 +1,5 @@
+package com.ust.project.exception;
+
+public class MusicNotFoundException {
+
+}
