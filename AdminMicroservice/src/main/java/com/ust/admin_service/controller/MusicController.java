@@ -20,31 +20,32 @@ public class MusicController {
         @Autowired
         MusicService musicService;
 
-        @CrossOrigin(origins = "http://localhost:4200")
+        //@CrossOrigin(origins = "http://localhost:4200")
         @PostMapping("/addmusic")
         public ResponseEntity<Music> addAMusic(@RequestBody MusicDto dto) {
 	//return ResponseEntity.ok(musicerepo.save(dto));
             return ResponseEntity.ok(musicService.add(dto));
         }
-        @CrossOrigin(origins = "http://localhost:4200")
+       // @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin
         @GetMapping("/allmusics")
         public List<Music> viewAllMusics() {
             return musicService.view();
         }
 
-        @CrossOrigin(origins = "http://localhost:4200")
+       // @CrossOrigin(origins = "http://localhost:4200")
         @GetMapping("/get/{musicId}")
         public ResponseEntity<Music> getById(@PathVariable long musicId) throws MusicNotFoundException {
             return ResponseEntity.ok(musicService.fetchById(musicId));
         }
 
-        @CrossOrigin(origins = "http://localhost:4200")
+       // @CrossOrigin(origins = "http://localhost:4200")
         @PutMapping("/update/{musicId}")
         public ResponseEntity<Music> updateMusic(@RequestBody MusicDto dto,@PathVariable @Valid long musicId ) throws MusicNotFoundException {
             return ResponseEntity.ok(musicService.update(dto,musicId));
         }
 
-        @CrossOrigin(origins = "http://localhost:4200")
+      //  @CrossOrigin(origins = "http://localhost:4200")
         @DeleteMapping("/delete/{musicId}")
         public String deleteMusic(@PathVariable long musicId)  throws MusicNotFoundException {
 

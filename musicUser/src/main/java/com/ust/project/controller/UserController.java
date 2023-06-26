@@ -7,12 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ust.project.dto.RatingDto;
 import com.ust.project.exception.InvalidRatingException;
@@ -23,6 +18,7 @@ import com.ust.project.service.UserService;
 @RestController
 @Validated
 @RequestMapping("/api/1.0/users")
+@CrossOrigin(origins = "http://localhost:4200", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class UserController {
 	
 	
@@ -30,6 +26,7 @@ public class UserController {
 	UserService userService;
 	
 	@GetMapping("/allmusics")
+	@CrossOrigin
 	public ResponseEntity<List<Music>> getAllMusics()
 	{
 
@@ -64,20 +61,40 @@ public class UserController {
 	}
 	
 	
-	@PostMapping("add/rating/music/{musicid}/{userid}")
-	public ResponseEntity<String> addRatingMusic(@Valid @RequestBody RatingDto ratingdto, @PathVariable Long musicid,@PathVariable Long userid) throws InvalidRatingException, MusicNotFoundException {
-		if (ratingdto.getRating() < 1 || ratingdto.getRating() > 5) {
-			//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid rating. Please provide a rating between 1 and 10");
-			throw new InvalidRatingException("Invalid rating. Please provide a rating between 1 and 5");
-		}
-		boolean ratingAdded = userService.addMusicRating(ratingdto, musicid,userid);
+//	@PostMapping("add/rating/music/{musicid}/{userid}")
+//	public ResponseEntity<String> addRatingMusic(@Valid @RequestBody RatingDto ratingdto, @PathVariable Long musicid,@PathVariable Long userid) throws InvalidRatingException, MusicNotFoundException {
+//		if (ratingdto.getRating() < 1 || ratingdto.getRating() > 5) {
+//			//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid rating. Please provide a rating between 1 and 10");
+//			throw new InvalidRatingException("Invalid rating. Please provide a rating between 1 and 5");
+//		}
+//		boolean ratingAdded = userService.addMusicRating(ratingdto, musicid,userid);
+//
+//		if (ratingAdded) {
+//			return ResponseEntity.status(HttpStatus.CREATED).body("Rating added successfully.");
+//		} else {
+//			throw new MusicNotFoundException("Failed to add rating, Music not found");
+//		}
+//
+//	}
+@PostMapping("add/rating/music/{musicId}/{userId}")
+public ResponseEntity<String> addRatingMusic(@Valid @RequestBody RatingDto ratingdto, @PathVariable long musicId,@PathVariable Long userId) throws InvalidRatingException, MusicNotFoundException {
+	if (ratingdto.getRating() < 1 || ratingdto.getRating() > 10) {
+		//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid rating. Please provide a rating between 1 and 10");
+		throw new InvalidRatingException("Invalid rating. Please provide a rating between 1 and 10");
+	}
+	boolean ratingAdded = userService.addMusicRating(ratingdto, musicId,userId);
 
-		if (ratingAdded) {
-			return ResponseEntity.status(HttpStatus.CREATED).body("Rating added successfully.");
-		} else {
-			throw new MusicNotFoundException("Failed to add rating, Music not found");
-		}
+	if (ratingAdded) {
+		return ResponseEntity.status(HttpStatus.CREATED).body("Rating added successfully.");
+	} else {
+		throw new MusicNotFoundException("Failed to add rating, Music not found");
+	}
 
+}
+	@GetMapping("/rating/overall/{musicId}")
+	public ResponseEntity<Double> getMusicOverallRating(@PathVariable long musicId) {
+		double overallRating = userService.getMusicOverallRating(musicId);
+		return ResponseEntity.ok(overallRating);
 	}
 
 }
